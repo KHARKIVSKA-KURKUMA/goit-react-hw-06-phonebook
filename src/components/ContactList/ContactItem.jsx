@@ -18,12 +18,14 @@ const ContactListItem = props => {
   /* ------------------------------- HANDLE EDIT ------------------------------ */
   const handleEdit = () => {
     if (isEdit) {
-      const updatedContact = {
-        id: props.id,
-        name,
-        number,
-      };
-      props.onEditClick(updatedContact);
+      if (name !== props.name || number !== props.number) {
+        const updatedContact = {
+          id: props.id,
+          name,
+          number,
+        };
+        props.onEditClick(updatedContact);
+      }
     }
     setIsEdit(prev => !prev);
   };
@@ -61,13 +63,19 @@ const ContactListItem = props => {
         <Number>{props.number}</Number>
       )}
       <BtnWrap>
-        <DeleteButton
-          type="button"
-          onClick={() => props.onDeleteClick(props.id)}
+        {!isEdit && (
+          <DeleteButton
+            type="button"
+            onClick={() => props.onDeleteClick(props.id)}
+          >
+            Delete
+          </DeleteButton>
+        )}
+
+        <EditButton
+          type={isEdit ? 'submit' : 'button'}
+          onClick={() => handleEdit()}
         >
-          Delete
-        </DeleteButton>
-        <EditButton type="button" onClick={() => handleEdit()}>
           {isEdit ? 'Save' : 'Edit'}
         </EditButton>
       </BtnWrap>

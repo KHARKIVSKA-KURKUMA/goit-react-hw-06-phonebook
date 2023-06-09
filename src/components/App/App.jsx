@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ToastContainer, toast } from 'react-toastify';
 import {
   Title,
@@ -12,13 +12,26 @@ import ContactForm from '../ContactForm';
 import { nanoid } from 'nanoid';
 import ContactList from '../ContactList';
 import Filter from 'components/Filter/Filter';
-import useLocalStorage from 'hooks/useLocalStorage';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  addContactAction,
+  removeContactAction,
+  updateContactAction,
+} from 'store/contacts/actions';
+import { changeFilterAction } from 'store/filter/actions';
+import { contactSelector, filterSelector } from 'store/selectors';
 
 const App = () => {
-  /* ---------------------------------- STATE --------------------------------- */
-  const [contacts, setContacts] = useLocalStorage('contacts', []);
-  const [filterText, setFilterText] = useState('');
-
+  const { contacts } = useSelector(contactSelector);
+  const { filter } = useSelector(filterSelector);
+  /* -------------------------------------------------------------------------- */
+  const dispatch = useDispatch();
+  useEffect(() => {
+    console.log('contacts :>> ', contacts);
+  }, [contacts]);
+  useEffect(() => {
+    console.log('filter  :>> ', filter);
+  }, [filter]);
   /* ------------------------------- ADD CONTACT ------------------------------ */
   const addContact = ({ name, number }) => {
     if (contacts.find(contact => contact.name === name)) {
@@ -29,31 +42,23 @@ const App = () => {
         name: name,
         number: number,
       };
-      setContacts(prev => [newContact, ...prev]);
+      dispatch(addContactAction(newContact));
     }
   };
 
   /* ------------------------------ CHANGE FILTER ----------------------------- */
-  const changeFilter = e => setFilterText(e.currentTarget.value);
-
+  const changeFilter = e => dispatch(changeFilterAction(e.currentTarget.value));
   /* ----------------------------- DELETE CONTACTS ---------------------------- */
   const deleteContact = contactId => {
-    setContacts(prev => prev.filter(contact => contact.id !== contactId));
+    dispatch(removeContactAction(contactId));
   };
   /* ------------------------------ EDIT CONTACT ------------------------------ */
   const editContact = contact => {
-    setContacts(prev =>
-      prev.map(el => {
-        if (el.id === contact.id) {
-          return contact;
-        }
-        return el;
-      })
-    );
+    dispatch(updateContactAction(contact));
   };
   /* -------------------------- GET FILTERED CONTACTS ------------------------- */
   const getFilteredContacts = () => {
-    const normalizedFilter = filterText.toLowerCase();
+    const normalizedFilter = filter.toLowerCase();
     return contacts.filter(({ name }) =>
       name.toLowerCase().includes(normalizedFilter)
     );
@@ -69,7 +74,7 @@ const App = () => {
       </FormWrap>
       <div>
         <SubTitle>Contacts</SubTitle>
-        <Filter filter={filterText} onChange={changeFilter} />
+        <Filter filter={filter} onChange={changeFilter} />
         {getFilteredContacts().length > 0 ? (
           <ContactWrap>
             <ContactList
