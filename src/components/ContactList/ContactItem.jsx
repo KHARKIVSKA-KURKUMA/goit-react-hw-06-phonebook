@@ -9,10 +9,13 @@ import {
   Input,
 } from './Contact.styled';
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { removeContact, updateContact } from 'store/contacts/contactSlice';
 
 const ContactListItem = props => {
   /* ---------------------------------- STATE --------------------------------- */
   const [isEdit, setIsEdit] = useState(false);
+  const dispatch = useDispatch();
   const [name, setName] = useState(props.name);
   const [number, setNumber] = useState(props.number);
   /* ------------------------------- HANDLE EDIT ------------------------------ */
@@ -24,7 +27,7 @@ const ContactListItem = props => {
           name,
           number,
         };
-        props.onEditClick(updatedContact);
+        dispatch(updateContact(updatedContact));
       }
     }
     setIsEdit(prev => !prev);
@@ -66,12 +69,11 @@ const ContactListItem = props => {
         {!isEdit && (
           <DeleteButton
             type="button"
-            onClick={() => props.onDeleteClick(props.id)}
+            onClick={() => dispatch(removeContact(props.id))}
           >
             Delete
           </DeleteButton>
         )}
-
         <EditButton
           type={isEdit ? 'submit' : 'button'}
           onClick={() => handleEdit()}

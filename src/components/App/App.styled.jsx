@@ -21,20 +21,7 @@ const Container = styled.div`
   margin: 0 auto;
   gap: 30px;
 `;
-const Notification = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #f8d7da;
-  color: #721c24;
-  border-radius: 5px;
-  font-size: 23px;
-  font-weight: bold;
-  margin-top: 20px;
-  padding: 20px;
-  min-width: 300px;
-`;
-const FormWrap = styled.div``;
-const ContactWrap = styled.div``;
 
-export { Title, Container, FormWrap, ContactWrap, SubTitle, Notification };
+const Wrap = styled.div``;
+
+export { Title, Container, Wrap, SubTitle };

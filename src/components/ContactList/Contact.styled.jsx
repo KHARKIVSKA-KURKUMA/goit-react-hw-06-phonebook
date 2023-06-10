@@ -1,5 +1,19 @@
 import styled from 'styled-components';
 
+const Notification = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #f8d7da;
+  color: #721c24;
+  border-radius: 5px;
+  font-size: 23px;
+  font-weight: bold;
+  margin-top: 20px;
+  padding: 20px;
+  min-width: 300px;
+`;
+const ContactWrap = styled.div``;
 const List = styled.ul`
   padding: 0;
   list-style: none;
@@ -73,4 +87,6 @@ export {
   EditButton,
   BtnWrap,
   Input,
+  ContactWrap,
+  Notification,
 };
