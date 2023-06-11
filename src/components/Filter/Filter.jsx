@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { Container, TextFilter, InputFilter } from './Filter.styled';
 import { filterSelector } from 'store/selectors';
-import { changeFilter } from 'store/filter/filterReducer';
+import { changeFilter } from 'store/filter/filterSlice';
 
 const Filter = () => {
   const { filter } = useSelector(filterSelector);
